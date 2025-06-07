@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="noindex">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Armador de Cotizaciones</title>
+    <link rel="icon" href="https://cdn1.site-media.eu/images/0/11703058/Favicon.png" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        @media print {
+            body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .no-print { display: none !important; }
+            #printableArea {
+                margin: 0 !important; 
+                padding: 0 !important; 
+                box-shadow: none !important;
+                max-width: 100% !important;
+                width: auto !important; 
+            }
+            .section-hidden-print { display: none !important; }
+            textarea { overflow: hidden !important; height: auto !important; }
+            .page-break-before { page-break-before: always; } 
+        }
+        
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type="number"] {
+            -moz-appearance: textfield;
+            appearance: textfield;
+        }
+        .form-input-line, .form-select-line {
+            border: none;
+            border-bottom: 1px solid #cbd5e1; 
+            border-radius: 0;
+            padding-left: 2px;
+            padding-right: 2px;
+            background-color: transparent; 
+        }
+        .form-input-line:focus, .form-select-line:focus {
+            outline: none;
+            border-bottom: 1px solid #3b82f6; 
+            box-shadow: none;
+        }
+        .table-cell-input, .table-cell-select { 
+            min-width: 60px; 
+        }
+        .textarea-auto-height {
+            resize: none;
+            overflow-y: hidden; 
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 0.5rem 2rem; 
+        }
+        .approval-grid { 
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+            gap: 0.5rem 1rem; /* Reduced gap */
+        }
+        /* New style for the delete button */
+        .delete-item-btn {
+            background: none;
+            border: none;
+            color: #ef4444; /* red-500 */
+            font-size: 1.5rem;
+            line-height: 1;
+            cursor: pointer;
+            padding: 0.25rem;
+            transition: color 0.15s ease-in-out;
+        }
+        .delete-item-btn:hover {
+            color: #b91c1c; /* red-700 */
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <div id="quoteFormContainer" class="p-2 md:p-4">
+        <!-- Main container with reduced padding -->
+        <div id="printableArea" class="max-w-4xl mx-auto bg-white shadow-xl rounded-lg p-4 md:p-6 print:shadow-none">
+          
+            <!-- Header section with reduced margins -->
+            <header class="mb-4 pb-2 border-b border-gray-300">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
+                    <div>
+                        <!-- Reduced logo size -->
+                        <img id="companyLogo" src="https://cdn1.site-media.eu/images/0/11703076/Logo_MAS.png" alt="Logo de la Compañía" class="h-12 sm:h-16 mb-2 sm:mb-0">
+                        <p class="text-xs text-gray-600">Boulevard Adolfo López Mateos Número 2235, quinto piso,</p>
+                        <p class="text-xs text-gray-600">Colonia Las Águilas, Alcaldía Álvaro Obregón, 01710 Ciudad de México.</p>
+                        <p class="text-xs text-gray-800">RFC: MAS190523PN6</p>
+                    </div>
+                    <div class="text-left sm:text-right mt-2 sm:mt-0">
+                        <!-- Reduced heading size -->
+                        <h1 class="text-2xl font-bold text-slate-700">COTIZACIÓN</h1>
+                    </div>
+                </div>
+
+                <div class="info-grid text-sm">
+                    <div class="flex flex-col">
+                        <label for="cliente" class="block font-medium text-gray-700">Cliente:</label>
+                        <input type="text" id="cliente" name="cliente" class="form-input-line mt-1 block w-full" value="Modifique por favor">
+                    </div>
+                    <div class="flex flex-col">
+                        <label for="cotizacionNum" class="block font-medium text-gray-700"># Cotización:</label>
+                        <input type="text" id="cotizacionNum" name="cotizacionNum" class="form-input-line mt-1 block w-full" value="Modifique por favor">
+                    </div>
+                    <div class="flex flex-col">
+                        <label for="contacto" class="block font-medium text-gray-700">Contacto:</label>
+                        <input type="text" id="contacto" name="contacto" class="form-input-line mt-1 block w-full" value="Modifique por favor">
+                    </div>
+                    <div class="flex flex-col">
+                        <label for="proveedorNum" class="block font-medium text-gray-700">Número de Cliente:</label>
+                        <input type="text" id="proveedorNum" name="proveedorNum" class="form-input-line mt-1 block w-full" value="Modifique por favor">
+                    </div>
+                    <div class="flex flex-col">
+                        <label for="fecha" class="block font-medium text-gray-700">Fecha:</label>
+                        <input type="text" id="fecha" name="fecha" class="form-input-line mt-1 block w-full" value="Modifique por favor">
+                    </div>
+                    <div class="flex flex-col">
+                        <label for="moneda" class="block font-medium text-gray-700">Moneda:</label>
+                        <input type="text" id="moneda" name="moneda" class="form-input-line mt-1 block w-full" value="Pesos Mexicanos MXN">
+                    </div>
+                </div>
+            </header>
+
+   
+            <!-- Animales Section with reduced margins -->
+            <section id="animalesSection" class="mb-4">
+                <h2 class="text-lg font-semibold text-slate-700 mb-2">Animales</h2>
+                <div class="overflow-x-auto">
+                    <!-- Table cells with reduced padding -->
+                    <table class="min-w-full divide-y divide-gray-200 text-xs">
+                        <thead class="bg-slate-600 text-gray-100">
+                            <tr>
+                                <th class="px-2 py-1 text-left">#</th>
+                                <th class="px-2 py-1 text-left">Especie</th>
+                                <th class="px-2 py-1 text-left">Cepa</th>
+                                <th class="px-2 py-1 text-left">Sexo</th>
+                                <th class="px-2 py-1 text-left">Edad</th>
+                                <th class="px-2 py-1 text-left">Peso (gr)</th>
+                                <th class="px-2 py-1 text-left">Cantidad</th>
+                                <th class="px-2 py-1 text-left">P. Unitario</th>
+                                <th class="px-2 py-1 text-left">Costo M.N.</th>
+                                <th class="px-1 py-1 text-center no-print">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="animalesTableBody" class="bg-white divide-y divide-gray-200">
+                        </tbody>
+                    </table>
+                </div>
+                <button type="button" id="addAnimalRow" class="no-print mt-2 text-sm bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-1 px-3 rounded-md shadow-sm transition duration-150 ease-in-out">Agregar Partida</button>
+
+                <!-- Totals section with reduced margins and spacing -->
+                <div class="mt-2 text-sm space-y-0.5 text-right">
+                    <div class="grid grid-cols-3 items-center">
+                        <span class="col-span-2 font-medium">SUBTOTAL:</span>
+                        <span id="animalesSubtotal" class="font-bold">$0.00</span>
+                    </div>
+                    <div class="grid grid-cols-3 items-center">
+                        <label for="animalesDescuentoPorcentaje" class="col-span-1 text-left font-medium">DESCUENTO (%):</label>
+                        <input type="number" id="animalesDescuentoPorcentaje" value="0" class="form-input-line col-span-1 text-right w-16 ml-auto no-print">
+                        <span id="animalesDescuentoMonto" class="font-bold">-$0.00</span>
+                    </div>
+                     <div class="grid grid-cols-3 items-center">
+                        <label for="animalesIVAPorcentaje" class="col-span-1 text-left font-medium">IVA (%):</label>
+                        <input type="number" id="animalesIVAPorcentaje" value="0" class="form-input-line col-span-1 text-right w-16 ml-auto no-print">
+                        <span id="animalesIVA" class="font-bold">$0.00</span>
+                    </div>
+                    <div class="grid grid-cols-3 items-center border-t pt-1 mt-1 border-gray-300">
+                        <!-- Reduced Total text size -->
+                        <span class="col-span-2 text-base font-bold text-slate-700">TOTAL ANIMALES:</span>
+                        <span id="animalesTotalNeto" class="text-base font-bold text-slate-700">$0.00</span>
+                    </div>
+                </div>
+            </section>
+
+      
+            <div class="mb-2 flex items-center gap-2 no-print">
+                <input type="checkbox" id="toggleSuministrosSection" class="form-checkbox h-4 w-4 text-emerald-600 border-gray-300 rounded focus:ring-emerald-500">
+                <label for="toggleSuministrosSection" class="text-sm font-medium text-gray-700">Incluir Sección de Otros Productos / Suministros</label>
+            </div>
+            
+            <!-- Suministros Section with reduced margins -->
+            <section id="suministrosSection" class="mb-4"> 
+                <h2 class="text-lg font-semibold text-slate-700 mb-2">Otros Productos / Suministros</h2>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200 text-xs table-fixed">
+                        <thead class="bg-slate-600 text-gray-100">
+                            <tr>
+                                <th class="px-2 py-1 text-left w-[5%]">#</th> 
+                                <th class="px-2 py-1 text-left w-[35%]">Descripción</th> 
+                                <th class="px-2 py-1 text-left w-[10%]">Cantidad</th> 
+                                <th class="px-2 py-1 text-left w-[15%]">Unidad</th>
+                                <th class="px-2 py-1 text-left w-[15%]">P. Unitario</th>
+                                <th class="px-2 py-1 text-left w-[15%]">Costo M.N.</th>
+                                <th class="px-1 py-1 text-center no-print w-auto">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="suministrosTableBody" class="bg-white divide-y divide-gray-200">
+                        </tbody>
+                    </table>
+                </div>
+                <button type="button" id="addSuministroRow" class="no-print mt-2 text-sm bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-1 px-3 rounded-md shadow-sm transition duration-150 ease-in-out">Agregar Suministro</button>
+
+                <div class="mt-2 text-sm space-y-0.5 text-right">
+                    <div class="grid grid-cols-3 items-center">
+                        <span class="col-span-2 font-medium">SUBTOTAL:</span>
+                        <span id="suministrosSubtotal" class="font-bold">$0.00</span>
+                    </div>
+                      <div class="grid grid-cols-3 items-center">
+                        <label for="suministrosDescuentoPorcentaje" class="col-span-1 text-left font-medium">DESCUENTO (%):</label>
+                        <input type="number" id="suministrosDescuentoPorcentaje" value="0" class="form-input-line col-span-1 text-right w-16 ml-auto no-print">
+                        <span id="suministrosDescuentoMonto" class="font-bold">-$0.00</span>
+                    </div>
+                    <div class="grid grid-cols-3 items-center">
+                         <label for="suministrosIVAPorcentaje" class="col-span-1 text-left font-medium">IVA (%):</label>
+                        <input type="number" id="suministrosIVAPorcentaje" value="16" class="form-input-line col-span-1 text-right w-16 ml-auto no-print">
+                        <span id="suministrosIVA" class="font-bold">$0.00</span>
+                    </div>
+                    <div class="grid grid-cols-3 items-center border-t pt-1 mt-1 border-gray-300">
+                        <span class="col-span-2 text-base font-bold text-slate-700">TOTAL SUMINISTROS:</span>
+                        <span id="suministrosTotalNeto" class="text-base font-bold text-slate-700">$0.00</span>
+                    </div>
+                </div>
+            </section>
+
+            
+            <!-- Grand Total Section with reduced margins, padding, and text size -->
+            <section id="grandTotalSection" class="my-4 py-2 border-t-2 border-b-2 border-slate-700">
+                 <div class="text-right space-y-1">
+                      <div class="grid grid-cols-3 items-center">
+                          <span class="col-span-2 text-xl font-bold text-slate-800">GRAN TOTAL en MXN:</span>
+                          <span id="granTotalCotizacion" class="text-xl font-bold text-slate-800">$0.00</span>
+                      </div>
+                 </div>
+            </section>
+
+            
+            <!-- Observaciones Section with reduced margins -->
+            <section id="observacionesSection" class="mb-4">
+                 <h2 class="text-base font-semibold text-slate-700 mb-1">Observaciones:</h2>
+                 <!-- Reduced initial rows for textarea -->
+                 <textarea id="observaciones" name="observaciones" rows="4" class="form-input-line mt-1 block w-full text-xs textarea-auto-height" placeholder="Escriba aquí las observaciones..."></textarea>
+            </section>
+
+            
+            <!-- Aprobacion Section with reduced margins and padding -->
+            <section id="aprobacionSection" class="mb-4 pt-4 border-t border-gray-300 page-break-before"> 
+                 <div class="bg-gray-100 p-2 rounded-md my-2">
+                     <h3 class="font-semibold text-slate-700 mb-1 text-sm">DECLARATORIA</h3>
+                     <p class="text-xs text-gray-600">Los modelos animales que Modelos Animales y Servicios S.A. de C.V. ofrece están licenciados por Harlan Laboratories Israel y no pueden ser reproducidos para fines comerciales. La información contenida en este documento es propiedad de Modelos Animales y Servicios S.A. de C.V. y no podrá ser utilizada o reproducida por ningún medio sin el consentimiento y autorización por escrito de la empresa.</p>
+                 </div>
+                 <p class="font-bold text-gray-600 mb-2 text-center text-sm">Quedamos a sus órdenes para cualquier duda o comentario.</p>
+                 
+                 <div class="mt-4 mb-6 text-center">
+                     <div class="mb-1 h-16 flex justify-center items-center"> 
+                         <img id="signatureImage" src="https://cdn1.site-media.eu/images/0/16383443/3bK9sR2vPqLmY7cW1xZ0aGjNfUoE6hI4dXtC5mVbzAeFpQyS8rJnTu-5w-m3ZT_q2m5lSr0DvHvZw.png" alt="Firma" class="max-h-full">
+                     </div>
+                     <input type="text" id="directoraNombre" class="form-input-line w-64 mx-auto block text-center text-sm" value="Lic. Mónica Valdivia Ponce">
+                     <p class="text-xs text-gray-700">Directora General</p>
+                     <p class="text-xs text-gray-700">Modelos Animales y Servicios, S.A. de C.V.</p>
+                 </div>
+
+                 <h2 class="text-base font-semibold text-slate-700 mb-2">Aprobación de la cotización:</h2>
+                 <p class="text-xs text-gray-600 mb-3">(Favor de llenar este espacio y enviar la cotización completa escaneada, si se está de acuerdo con la misma, en el momento de recibirla se considerará aprobada por el cliente)</p>
+                 
+                 <div class="approval-grid text-sm"> 
+                     <div class="flex flex-col"> 
+                         <label for="aprobacionNombre" class="block font-medium text-gray-700">Nombre:</label>
+                         <input type="text" id="aprobacionNombre" name="aprobacionNombre" class="form-input-line mt-1 block w-full">
+                     </div>
+                     <div class="flex flex-col"> 
+                         <label for="aprobacionFirma" class="block font-medium text-gray-700">Firma:</label>
+                         <input type="text" id="aprobacionFirma" name="aprobacionFirma" class="form-input-line mt-1 block w-full">
+                     </div>
+                     <div class="flex flex-col md:col-span-2"> 
+                         <label for="aprobacionCargo" class="block font-medium text-gray-700">Cargo:</label>
+                         <input type="text" id="aprobacionCargo" name="aprobacionCargo" class="form-input-line mt-1 block w-full">
+                     </div>
+                     <div class="flex flex-col md:col-span-2"> 
+                         <label for="aprobacionRazonSocial" class="block font-medium text-gray-700">Nombre completo (persona física) o Denominación Completa (razón social):</label>
+                         <input type="text" id="aprobacionRazonSocial" name="aprobacionRazonSocial" class="form-input-line mt-1 block w-full">
+                     </div>
+                     <div class="flex flex-col"> 
+                         <label for="aprobacionTelefono" class="block font-medium text-gray-700">Teléfono:</label>
+                         <input type="tel" id="aprobacionTelefono" name="aprobacionTelefono" class="form-input-line mt-1 block w-full">
+                     </div>
+                     <div class="flex flex-col"> 
+                         <label for="aprobacionEmail" class="block font-medium text-gray-700">e-mail:</label>
+                         <input type="email" id="aprobacionEmail" name="aprobacionEmail" class="form-input-line mt-1 block w-full">
+                     </div>
+                     <div class="flex flex-col md:col-span-2"> 
+                         <label for="aprobacionFecha" class="block font-medium text-gray-700">Fecha de Aprobación:</label>
+                         <input type="text" id="aprobacionFecha" name="aprobacionFecha" class="form-input-line mt-1 block w-full">
+                     </div>
+                 </div>
+            </section>
+
+            <!-- Footer with reduced margins -->
+            <footer class="mt-6 pt-4 border-t border-gray-300 text-center text-xs text-gray-500">
+                  <p>Blvd. Adolfo López Mateos 2235, Int. Piso 5, Col. Las Aguilas, Alvaro Obregón, 01710, Ciudad de México.</p>
+                  <p>Tels. 55-5622 4800 Ext. 84047 email. ventas@modelosanimales.com.mx</p>
+            </footer>
+        </div>
+
+        <!-- Buttons container with reduced margins -->
+        <div class="max-w-4xl mx-auto mt-4 mb-2 flex flex-wrap justify-center gap-2 no-print">
+
+            <button id="exportJson" class="bg-blue-500 hover:bg-sky-600 text-white font-semibold py-2 px-4 rounded-md shadow-md transition duration-150 ease-in-out">Exportar Datos</button>
+            <label class="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded-md shadow-md transition duration-150 ease-in-out cursor-pointer">
+                Importar Datos
+                <input type="file" id="importJsonFile" accept=".json" class="hidden">
+            </label>
+            <button id="printQuote" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-md shadow-md transition duration-150 ease-in-out">Guardar | Imprimir</button>
+        </div>
+        <p class="text-xs text-center text-gray-700 no-print">
+            <strong>Creado por Carlos Marin Aquino version de sistema 1.0.1.</strong>
+        </p>
+    </div>
+    <script>
+        // --- GLOBAL VARS & CONSTANTS ---
+        const animalesTableBody = document.getElementById('animalesTableBody');
+        const addAnimalRowButton = document.getElementById('addAnimalRow');
+        const suministrosTableBody = document.getElementById('suministrosTableBody');
+        const addSuministroRowButton = document.getElementById('addSuministroRow');
+        const toggleSuministrosCheckbox = document.getElementById('toggleSuministrosSection');
+        const suministrosSectionElement = document.getElementById('suministrosSection');
+        const observacionesTextarea = document.getElementById('observaciones');
+        const aprobacionSection = document.getElementById('aprobacionSection'); 
+
+        let animalPartidaCounter = 0; 
+        let suministroPartidaCounter = 0; 
+
+        const cepasPorEspecie = {
+            "Ratón": ["C57BL/6", "ICR CD-1", "BALB/c"],
+            "Rata": ["Wistar", "S. Dawley"]
+        };
+        const unidadesSuministro = ["Kg", "Pza.", "Bulto"];
+
+        // --- UTILITIES ---
+        const formatCurrency = (value) => {
+            return new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(value || 0);
+        };
+        const parseFloatInput = (value) => {
+            const num = parseFloat(String(value).replace(/[^0-9.-]+/g,""));
+            return isNaN(num) ? 0 : num;
+        };
+        
+        function autoGrowTextarea(element) {
+            if(!element) return;
+            element.style.height = 'auto'; 
+            element.style.height = (element.scrollHeight) + 'px';
+        }
+        if(observacionesTextarea) observacionesTextarea.addEventListener('input', function() { autoGrowTextarea(this); });
+
+
+        // --- ANIMALES SECTION (ENTRADA MANUAL CON SELECTS PARCIALES) ---
+        function updateCepaOptionsForRow(especieSelect, cepaSelect) {
+            const selectedEspecie = especieSelect.value;
+            const currentCepaValue = cepaSelect.value; 
+            cepaSelect.innerHTML = ''; 
+            const placeholderOption = document.createElement('option');
+            placeholderOption.value = "";
+            placeholderOption.textContent = "Seleccione Cepa";
+            cepaSelect.appendChild(placeholderOption);
+
+            if (cepasPorEspecie[selectedEspecie]) {
+                cepasPorEspecie[selectedEspecie].forEach(cepa => {
+                    const option = document.createElement('option');
+                    option.value = cepa;
+                    option.textContent = cepa;
+                    cepaSelect.appendChild(option);
+                });
+                if (cepasPorEspecie[selectedEspecie].includes(currentCepaValue)) {
+                    cepaSelect.value = currentCepaValue;
+                }
+            }
+        }
+
+        function createAnimalRow(item = {}) {
+            animalPartidaCounter++;
+            const row = animalesTableBody.insertRow();
+            row.id = `animal-row-${animalPartidaCounter}`;
+            row.dataset.partidaNum = animalPartidaCounter;
+            const partidaNum = item.partidaNum || animalPartidaCounter;
+
+            row.innerHTML = `
+                <td class="px-2 py-0.5 whitespace-nowrap text-center">${partidaNum}</td>
+                <td class="px-2 py-0.5 whitespace-nowrap">
+                    <select name="animal_especie" class="form-select-line w-full table-cell-select">
+                        <option value="">Seleccione Especie</option>
+                        <option value="Ratón"${item.especie === 'Ratón' ? ' selected' : ''}>Ratón</option>
+                        <option value="Rata"${item.especie === 'Rata' ? ' selected' : ''}>Rata</option>
+                    </select>
+                </td>
+                <td class="px-2 py-0.5">
+                    <select name="animal_cepa" class="form-select-line w-full table-cell-select">
+                        <option value="">Seleccione Cepa</option>
+                    </select>
+                </td>
+                <td class="px-2 py-0.5 whitespace-nowrap">
+                    <select name="animal_sexo" class="form-select-line w-full table-cell-select">
+                        <option value="">Seleccione Sexo</option>
+                        <option value="Macho"${item.sexo === 'Macho' ? ' selected' : ''}>Macho</option>
+                        <option value="Hembra"${item.sexo === 'Hembra' ? ' selected' : ''}>Hembra</option>
+                    </select>
+                </td>
+                <td class="px-2 py-0.5 whitespace-nowrap"><input type="text" name="animal_edad" class="form-input-line w-full table-cell-input" value="${item.edad || ''}"></td>
+                <td class="px-2 py-0.5 whitespace-nowrap"><input type="text" name="animal_peso" class="form-input-line w-full table-cell-input" value="${item.pesoGr || ''}"></td>
+                <td class="px-2 py-0.5 whitespace-nowrap"><input type="number" name="animal_cantidad" class="form-input-line w-full table-cell-input" value="${item.cantidad || 1}" min="0" step="1"></td>
+                <td class="px-2 py-0.5 whitespace-nowrap"><input type="number" name="animal_precioUnitario" class="form-input-line w-full table-cell-input" value="${item.precioUnitario || 0}" min="0" step="0.01"></td>
+                <td class="px-2 py-0.5 whitespace-nowrap text-right"><span name="animal_costoTotal">${formatCurrency(0)}</span></td>
+                <td class="px-1 py-0.5 text-center no-print"><button type="button" class="delete-item-btn" title="Eliminar Partida" data-rowid="${row.id}">&times;</button></td>
+            `;
+            
+            const especieSelect = row.querySelector('select[name="animal_especie"]');
+            const cepaSelect = row.querySelector('select[name="animal_cepa"]');
+
+            updateCepaOptionsForRow(especieSelect, cepaSelect);
+            if (item.cepa) { 
+                cepaSelect.value = item.cepa;
+            }
+            
+            especieSelect.addEventListener('change', function() {
+                updateCepaOptionsForRow(this, cepaSelect);
+            });
+
+            row.querySelectorAll('input[name="animal_cantidad"], input[name="animal_precioUnitario"]').forEach(input => {
+                 input.addEventListener('input', updateAnimalesTotals);
+            });
+            
+            updateAnimalesTotals(); 
+
+            return row;
+        }
+        
+        addAnimalRowButton.addEventListener('click', () => createAnimalRow());
+
+        function updateAnimalesTotals() {
+            let subtotal = 0;
+            animalesTableBody.querySelectorAll('tr').forEach(row => {
+                const cantidad = parseFloatInput(row.querySelector('input[name="animal_cantidad"]').value);
+                const precioUnitario = parseFloatInput(row.querySelector('input[name="animal_precioUnitario"]').value);
+                const costoTotal = cantidad * precioUnitario;
+                row.querySelector('span[name="animal_costoTotal"]').textContent = formatCurrency(costoTotal);
+                subtotal += costoTotal;
+            });
+
+            document.getElementById('animalesSubtotal').textContent = formatCurrency(subtotal);
+            
+            const descuentoPorcentajeAnimales = parseFloatInput(document.getElementById('animalesDescuentoPorcentaje').value) / 100;
+            const descuentoMontoAnimales = subtotal * descuentoPorcentajeAnimales;
+            document.getElementById('animalesDescuentoMonto').textContent = formatCurrency(-descuentoMontoAnimales);
+            
+            const baseIVAnimales = subtotal - descuentoMontoAnimales;
+            const ivaPorcentajeAnimales = parseFloatInput(document.getElementById('animalesIVAPorcentaje').value) / 100;
+            const ivaMontoAnimales = baseIVAnimales * ivaPorcentajeAnimales;
+            document.getElementById('animalesIVA').textContent = formatCurrency(ivaMontoAnimales);
+
+            const totalAnimalesNeto = baseIVAnimales + ivaMontoAnimales;
+            document.getElementById('animalesTotalNeto').textContent = formatCurrency(totalAnimalesNeto);
+            updateGranTotalCotizacion();
+        }
+        if(document.getElementById('animalesDescuentoPorcentaje')) document.getElementById('animalesDescuentoPorcentaje').addEventListener('input', updateAnimalesTotals);
+        if(document.getElementById('animalesIVAPorcentaje')) document.getElementById('animalesIVAPorcentaje').addEventListener('input', updateAnimalesTotals);
+
+        // --- SUMINISTROS SECTION ---
+        function toggleSuministrosVisibility() {
+            const isChecked = toggleSuministrosCheckbox.checked;
+            suministrosSectionElement.classList.toggle('hidden', !isChecked);
+            suministrosSectionElement.classList.toggle('section-hidden-print', !isChecked); 
+            updateSuministrosTotals();
+        }
+        if(toggleSuministrosCheckbox) toggleSuministrosCheckbox.addEventListener('change', toggleSuministrosVisibility);
+
+        function createSuministroRow(item = {}) {
+            suministroPartidaCounter++; 
+            const row = suministrosTableBody.insertRow();
+            row.id = `suministro-row-${suministroPartidaCounter}`;
+            row.dataset.partidaNum = suministroPartidaCounter;
+            const partidaNum = item.partidaNum || suministroPartidaCounter;
+
+            row.innerHTML = `
+                <td class="px-2 py-0.5 whitespace-nowrap text-center">${partidaNum}</td>
+                <td class="px-2 py-0.5"><input type="text" name="suministro_descripcion" class="form-input-line w-full table-cell-input" value="${item.descripcion || ''}"></td>
+                <td class="px-2 py-0.5 whitespace-nowrap"><input type="number" name="suministro_cantidad" class="form-input-line w-full table-cell-input" value="${item.cantidad || 1}" min="0" step="any"></td>
+                <td class="px-2 py-0.5 whitespace-nowrap">
+                    <select name="suministro_unidad" class="form-select-line w-full table-cell-select">
+                        ${unidadesSuministro.map(u => `<option value="${u}"${item.unidad === u ? ' selected' : ''}>${u}</option>`).join('')}
+                    </select>
+                </td>
+                <td class="px-2 py-0.5 whitespace-nowrap"><input type="number" name="suministro_precioUnitario" class="form-input-line w-full table-cell-input" value="${item.precioUnitario || 0}" min="0" step="0.01"></td>
+                <td class="px-2 py-0.5 whitespace-nowrap text-right"><span name="suministro_costoTotal">${formatCurrency(0)}</span></td>
+                <td class="px-1 py-0.5 text-center no-print"><button type="button" class="delete-item-btn" title="Eliminar Partida" data-rowid="${row.id}">&times;</button></td>
+            `;
+             row.querySelectorAll('input[name="suministro_cantidad"], input[name="suministro_precioUnitario"]').forEach(input => {
+                 input.addEventListener('input', updateSuministrosTotals);
+            });
+            updateSuministrosTotals(); 
+        }
+        if(addSuministroRowButton) addSuministroRowButton.addEventListener('click', () => createSuministroRow());
+
+        function updateSuministrosTotals() {
+            let subtotal = 0;
+            if (toggleSuministrosCheckbox.checked) {
+                suministrosTableBody.querySelectorAll('tr').forEach(row => {
+                    const cantidad = parseFloatInput(row.querySelector('input[name="suministro_cantidad"]').value);
+                    const precioUnitario = parseFloatInput(row.querySelector('input[name="suministro_precioUnitario"]').value);
+                    const costoTotal = cantidad * precioUnitario;
+                    row.querySelector('span[name="suministro_costoTotal"]').textContent = formatCurrency(costoTotal);
+                    subtotal += costoTotal;
+                });
+            } else {
+                 suministrosTableBody.querySelectorAll('tr').forEach(row => {
+                    row.querySelector('span[name="suministro_costoTotal"]').textContent = formatCurrency(0);
+                });
+            }
+
+            document.getElementById('suministrosSubtotal').textContent = formatCurrency(subtotal);
+            
+            const descuentoPorcentajeSuministros = parseFloatInput(document.getElementById('suministrosDescuentoPorcentaje').value) / 100;
+            const descuentoMontoSuministros = subtotal * descuentoPorcentajeSuministros;
+            document.getElementById('suministrosDescuentoMonto').textContent = formatCurrency(-descuentoMontoSuministros);
+
+            const baseIVASuministros = subtotal - descuentoMontoSuministros;
+            const ivaPorcentajeSuministros = parseFloatInput(document.getElementById('suministrosIVAPorcentaje').value) / 100;
+            const ivaMontoSuministros = baseIVASuministros * ivaPorcentajeSuministros;
+            document.getElementById('suministrosIVA').textContent = formatCurrency(ivaMontoSuministros);
+            
+            const totalSuministrosNeto = baseIVASuministros + ivaMontoSuministros;
+            document.getElementById('suministrosTotalNeto').textContent = formatCurrency(totalSuministrosNeto);
+            updateGranTotalCotizacion();
+        }
+        const suministrosDescuentoPorcentajeInput = document.getElementById('suministrosDescuentoPorcentaje');
+        if(suministrosDescuentoPorcentajeInput) suministrosDescuentoPorcentajeInput.addEventListener('input', updateSuministrosTotals);
+        const suministrosIVAPorcentajeInput = document.getElementById('suministrosIVAPorcentaje');
+        if(suministrosIVAPorcentajeInput) suministrosIVAPorcentajeInput.addEventListener('input', updateSuministrosTotals);
+
+
+        function reNumberAnimalPartidas() {
+            let currentPartida = 1;
+            animalesTableBody.querySelectorAll('tr').forEach(row => {
+                row.cells[0].textContent = currentPartida;
+                row.dataset.partidaNum = currentPartida; 
+                currentPartida++;
+            });
+            animalPartidaCounter = animalesTableBody.rows.length; 
+        }
+        function reNumberSuministroPartidas() {
+            let currentPartida = 1;
+            suministrosTableBody.querySelectorAll('tr').forEach(row => {
+                row.cells[0].textContent = currentPartida;
+                row.dataset.partidaNum = currentPartida;
+                currentPartida++;
+            });
+            suministroPartidaCounter = suministrosTableBody.rows.length;
+        }
+
+
+        document.addEventListener('click', function(event) {
+            const deleteButton = event.target.closest('.delete-item-btn');
+            if (deleteButton) {
+                const rowId = deleteButton.dataset.rowid;
+                const row = document.getElementById(rowId);
+                if (row) {
+                    const tableBody = row.parentNode;
+                    tableBody.removeChild(row);
+                    if (tableBody.id === 'animalesTableBody') {
+                        reNumberAnimalPartidas(); 
+                        updateAnimalesTotals();
+                    } else if (tableBody.id === 'suministrosTableBody') {
+                        reNumberSuministroPartidas(); 
+                        updateSuministrosTotals();
+                    }
+                }
+            }
+        });
+        
+        function updateGranTotalCotizacion() {
+            const totalAnimales = parseFloatInput(document.getElementById('animalesTotalNeto').textContent);
+            let totalSuministros = 0;
+            if (toggleSuministrosCheckbox.checked) {
+                 totalSuministros = parseFloatInput(document.getElementById('suministrosTotalNeto').textContent);
+            }
+            const granTotal = totalAnimales + totalSuministros;
+            document.getElementById('granTotalCotizacion').textContent = formatCurrency(granTotal);
+        }
+
+        // --- PRINT FUNCTION ---
+        document.getElementById('printQuote').addEventListener('click', () => {
+            console.log("Print button clicked. Preparing for print...");
+            try {
+                if (aprobacionSection) { 
+                    aprobacionSection.classList.remove('page-break-before-managed-pdf'); 
+                    
+                    if (toggleSuministrosCheckbox && document.getElementById('animalesSection') && document.getElementById('observacionesSection')) {
+                        if (!toggleSuministrosCheckbox.checked) {
+                            const alturaContenidoEstimada = document.getElementById('animalesSection').offsetHeight + 
+                                                          document.getElementById('observacionesSection').offsetHeight;
+                            const umbralAlturaPagina = 800; 
+                            if (alturaContenidoEstimada < umbralAlturaPagina) {
+                                aprobacionSection.classList.remove('page-break-before');
+                            } else {
+                                 aprobacionSection.classList.add('page-break-before');
+                            }
+                        } else {
+                             aprobacionSection.classList.add('page-break-before');
+                        }
+                    } else {
+                        if(aprobacionSection) aprobacionSection.classList.add('page-break-before'); 
+                    }
+                } else {
+                    console.warn("aprobacionSection element not found for print layout adjustment.");
+                }
+
+                if(observacionesTextarea) autoGrowTextarea(observacionesTextarea); 
+            } catch (error) {
+                console.error("Error during print preparation:", error);
+            }
+            
+            console.log("Calling window.print()...");
+            window.print();
+        });
+
+        // --- JSON EXPORT/IMPORT ---
+        document.getElementById('exportJson').addEventListener('click', () => {
+            const animalesData = [];
+            animalesTableBody.querySelectorAll('tr').forEach(row => {
+                animalesData.push({
+                    partidaNum: parseInt(row.dataset.partidaNum, 10),
+                    especie: row.querySelector('select[name="animal_especie"]').value, 
+                    cepa: row.querySelector('select[name="animal_cepa"]').value,     
+                    sexo: row.querySelector('select[name="animal_sexo"]').value,     
+                    edad: row.querySelector('input[name="animal_edad"]').value,     
+                    pesoGr: row.querySelector('input[name="animal_peso"]').value,     
+                    cantidad: parseFloatInput(row.querySelector('input[name="animal_cantidad"]').value),
+                    precioUnitario: parseFloatInput(row.querySelector('input[name="animal_precioUnitario"]').value), 
+                    costoTotal: parseFloatInput(row.querySelector('span[name="animal_costoTotal"]').textContent)
+                });
+            });
+
+            const suministrosData = [];
+            if (toggleSuministrosCheckbox.checked) {
+                suministrosTableBody.querySelectorAll('tr').forEach(row => {
+                    suministrosData.push({
+                        partidaNum: parseInt(row.dataset.partidaNum, 10), 
+                        descripcion: row.querySelector('input[name="suministro_descripcion"]').value,
+                        cantidad: parseFloatInput(row.querySelector('input[name="suministro_cantidad"]').value),
+                        unidad: row.querySelector('select[name="suministro_unidad"]').value,
+                        precioUnitario: parseFloatInput(row.querySelector('input[name="suministro_precioUnitario"]').value),
+                        costoTotal: parseFloatInput(row.querySelector('span[name="suministro_costoTotal"]').textContent)
+                    });
+                });
+            }
+
+            const jsonData = {
+                cliente: document.getElementById('cliente').value,
+                contacto: document.getElementById('contacto').value,
+                cotizacionNum: document.getElementById('cotizacionNum').value,
+                proveedorNum: document.getElementById('proveedorNum').value,
+                fecha: document.getElementById('fecha').value,
+                moneda: document.getElementById('moneda').value,
+                animales: animalesData,
+                animalesSubtotal: parseFloatInput(document.getElementById('animalesSubtotal').textContent),
+                animalesDescuentoPorcentaje: parseFloatInput(document.getElementById('animalesDescuentoPorcentaje').value),
+                animalesIVAPorcentaje: parseFloatInput(document.getElementById('animalesIVAPorcentaje').value), // Guardar IVA Animales
+                animalesDescuentoMonto: parseFloatInput(document.getElementById('animalesDescuentoMonto').textContent),
+                animalesIVA: parseFloatInput(document.getElementById('animalesIVA').textContent),
+                animalesTotalNeto: parseFloatInput(document.getElementById('animalesTotalNeto').textContent),
+                suministrosIncluidos: toggleSuministrosCheckbox.checked,
+                suministros: suministrosData,
+                suministrosSubtotal: parseFloatInput(document.getElementById('suministrosSubtotal').textContent),
+                suministrosDescuentoPorcentaje: parseFloatInput(document.getElementById('suministrosDescuentoPorcentaje').value), // Guardar Descuento Suministros
+                suministrosDescuentoMonto: parseFloatInput(document.getElementById('suministrosDescuentoMonto').textContent),
+                suministrosIVAPorcentaje: suministrosIVAPorcentajeInput ? parseFloatInput(suministrosIVAPorcentajeInput.value) : 16,
+                suministrosIVA: parseFloatInput(document.getElementById('suministrosIVA').textContent),
+                suministrosTotalNeto: parseFloatInput(document.getElementById('suministrosTotalNeto').textContent),
+                observaciones: observacionesTextarea ? observacionesTextarea.value : "",
+                granTotalCotizacion: parseFloatInput(document.getElementById('granTotalCotizacion').textContent),
+                aprobacionFirma: document.getElementById('aprobacionFirma').value,
+                aprobacionNombre: document.getElementById('aprobacionNombre').value,
+                aprobacionCargo: document.getElementById('aprobacionCargo').value,
+                aprobacionRazonSocial: document.getElementById('aprobacionRazonSocial').value,
+                aprobacionEmail: document.getElementById('aprobacionEmail').value,
+                aprobacionTelefono: document.getElementById('aprobacionTelefono').value,
+                aprobacionFecha: document.getElementById('aprobacionFecha').value
+            };
+
+            const jsonString = JSON.stringify(jsonData, null, 2);
+            const blob = new Blob([jsonString], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `cotizacion_data_${jsonData.cotizacionNum || 'export'}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+
+        document.getElementById('importJsonFile').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const data = JSON.parse(e.target.result);
+                        
+                        document.getElementById('cliente').value = data.cliente || '';
+                        document.getElementById('contacto').value = data.contacto || '';
+                        document.getElementById('cotizacionNum').value = data.cotizacionNum || '';
+                        document.getElementById('proveedorNum').value = data.proveedorNum || '';
+                        document.getElementById('fecha').value = data.fecha || '';
+                        document.getElementById('moneda').value = data.moneda || 'Pesos Mexicanos MXN';
+
+                        animalesTableBody.innerHTML = '';
+                        animalPartidaCounter = 0; 
+                        if (data.animales && Array.isArray(data.animales)) {
+                             data.animales.forEach(item => {
+                                 const newItem = {...item }; 
+                                 const newRow = createAnimalRow(newItem); 
+                            }); 
+                             reNumberAnimalPartidas(); 
+                        }
+                        document.getElementById('animalesDescuentoPorcentaje').value = data.animalesDescuentoPorcentaje || 10;
+                        document.getElementById('animalesIVAPorcentaje').value = data.animalesIVAPorcentaje || 0; 
+                        
+                        suministrosTableBody.innerHTML = '';
+                        suministroPartidaCounter = 0; 
+                        if(toggleSuministrosCheckbox) toggleSuministrosCheckbox.checked = data.suministrosIncluidos !== undefined ? data.suministrosIncluidos : false; 
+                        
+                        if (toggleSuministrosCheckbox && toggleSuministrosCheckbox.checked && data.suministros && Array.isArray(data.suministros)) {
+                            data.suministros.forEach(item => createSuministroRow(item));
+                        }
+                        if(document.getElementById('suministrosDescuentoPorcentaje')) document.getElementById('suministrosDescuentoPorcentaje').value = data.suministrosDescuentoPorcentaje || 0;
+                         if(suministrosIVAPorcentajeInput) suministrosIVAPorcentajeInput.value = data.suministrosIVAPorcentaje || 16;
+
+                        if(observacionesTextarea) {
+                            observacionesTextarea.value = data.observaciones || 
+                                "Esta mercancía grava tasa \"0\" de IVA.\nLos productos se entregarán en el domicilio señalado por el cliente, el 12 de febrero de 2025.\nVigencia de esta cotización es de 30 dias naturales.\nGarantia: Condiciones UNAM\nEstos precios reflejan el 75% de descuento concedido a la Facultad de Química de la UNAM.\nDisposición inmediata de los animales.\nCondiciones de Pago: Crédito UNAM, 20 días naturales.";
+                            autoGrowTextarea(observacionesTextarea);
+                        }
+                        document.getElementById('aprobacionFirma').value = data.aprobacionFirma || '';
+                        document.getElementById('aprobacionNombre').value = data.aprobacionNombre || '';
+                        document.getElementById('aprobacionCargo').value = data.aprobacionCargo || '';
+                        document.getElementById('aprobacionRazonSocial').value = data.aprobacionRazonSocial || '';
+                        document.getElementById('aprobacionEmail').value = data.aprobacionEmail || '';
+                        document.getElementById('aprobacionTelefono').value = data.aprobacionTelefono || '';
+                        document.getElementById('aprobacionFecha').value = data.aprobacionFecha || '';
+
+
+                        if(toggleSuministrosCheckbox) toggleSuministrosVisibility(); 
+                        updateAnimalesTotals(); 
+                        updateSuministrosTotals(); 
+                        
+                        console.log('Datos importados correctamente.');
+                    } catch (error) {
+                        console.error('Error al importar JSON:', error);
+                        console.error('Error al leer el archivo JSON. Asegúrese de que el formato es correcto.');
+                    }
+                };
+                reader.readAsText(file);
+                event.target.value = null; 
+            }
+        });
+        
+        function initializeQuote() {
+            if(observacionesTextarea) {
+                 observacionesTextarea.value = "Esta mercancía grava tasa \"0\" de IVA.\nVigencia de la cotización 30 días naturales a partir de la emisión\nLa vigencia de esta cotización es de 30 dias naturales.\nCondiciones de Pago: EDITAR POR FAVOR";
+                 autoGrowTextarea(observacionesTextarea);
+            }
+            if(toggleSuministrosCheckbox) {
+                toggleSuministrosCheckbox.checked = false; 
+                toggleSuministrosVisibility(); 
+            }
+            updateAnimalesTotals(); 
+            updateSuministrosTotals(); 
+        }
+
+        window.onload = initializeQuote;
+
+    </script>
+</body>
+</html>
