@@ -11,6 +11,9 @@
         body {
             font-family: 'Inter', sans-serif;
         }
+        .print-only {
+            display: none;
+        }
         @media print {
             body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
             .no-print { display: none !important; }
@@ -30,6 +33,19 @@
                 padding: 0 !important;
                 white-space: pre-wrap; /* Respect newlines and wrap text */
                 word-break: break-word;
+            }
+            .form-select-line, .form-input-line {
+                border: none !important;
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                appearance: none;
+                background-color: transparent !important;
+            }
+            .form-select-line {
+                display: none !important;
+            }
+            .print-only {
+                display: inline !important;
             }
         }
         
@@ -399,6 +415,25 @@ Uso de CFDI: Señalar por parte del cliente.`;
         if(observacionesTextarea) observacionesTextarea.addEventListener('input', function() { autoGrowTextarea(this); });
 
 
+        // --- PRINT-ONLY SPAN SETUP ---
+        function setupPrintSpans(row) {
+            const selects = row.querySelectorAll('select');
+            selects.forEach(select => {
+                const printSpan = select.nextElementSibling;
+                if (printSpan && printSpan.classList.contains('print-only')) {
+                    const updateSpan = () => {
+                        if (select.value === "") {
+                            printSpan.textContent = "";
+                        } else {
+                            printSpan.textContent = select.options[select.selectedIndex]?.text || select.value;
+                        }
+                    };
+                    select.addEventListener('change', updateSpan);
+                    updateSpan(); // Initial update
+                }
+            });
+        }
+
         // --- ANIMALES SECTION (ENTRADA MANUAL CON SELECTS PARCIALES) ---
         function updateCepaOptionsForRow(especieSelect, cepaSelect) {
             const selectedEspecie = especieSelect.value;
@@ -436,19 +471,19 @@ Uso de CFDI: Señalar por parte del cliente.`;
                         <option value="">Seleccione Especie</option>
                         <option value="Ratón"${item.especie === 'Ratón' ? ' selected' : ''}>Ratón</option>
                         <option value="Rata"${item.especie === 'Rata' ? ' selected' : ''}>Rata</option>
-                    </select>
+                    </select><span class="print-only"></span>
                 </td>
                 <td class="px-2 py-0.5">
                     <select name="animal_cepa" class="form-select-line w-full table-cell-select">
                         <option value="">Seleccione Cepa</option>
-                    </select>
+                    </select><span class="print-only"></span>
                 </td>
                 <td class="px-2 py-0.5 whitespace-nowrap">
                     <select name="animal_sexo" class="form-select-line w-full table-cell-select">
                         <option value="">Seleccione Sexo</option>
                         <option value="Macho"${item.sexo === 'Macho' ? ' selected' : ''}>Macho</option>
                         <option value="Hembra"${item.sexo === 'Hembra' ? ' selected' : ''}>Hembra</option>
-                    </select>
+                    </select><span class="print-only"></span>
                 </td>
                 <td class="px-2 py-0.5 whitespace-nowrap"><input type="text" name="animal_edad" class="form-input-line w-full table-cell-input text-center-input" value="${item.edad || ''}"></td>
                 <td class="px-2 py-0.5 whitespace-nowrap"><input type="text" name="animal_peso" class="form-input-line w-full table-cell-input text-center-input" value="${item.pesoGr || ''}"></td>
@@ -462,11 +497,10 @@ Uso de CFDI: Señalar por parte del cliente.`;
             const cepaSelect = row.querySelector('select[name="animal_cepa"]');
             const precioUnitarioInput = row.querySelector('input[name="animal_precioUnitario"]');
 
-            // Format unit price to 2 decimal places on blur
             precioUnitarioInput.addEventListener('blur', (e) => {
                 const value = parseFloatInput(e.target.value);
                 e.target.value = value.toFixed(2);
-                updateAnimalesTotals(); // Recalculate totals after formatting
+                updateAnimalesTotals();
             });
 
             updateCepaOptionsForRow(especieSelect, cepaSelect);
@@ -476,14 +510,18 @@ Uso de CFDI: Señalar por parte del cliente.`;
             
             especieSelect.addEventListener('change', function() {
                 updateCepaOptionsForRow(this, cepaSelect);
+                const cepaPrintSpan = cepaSelect.nextElementSibling;
+                if (cepaPrintSpan) {
+                    cepaPrintSpan.textContent = cepaSelect.options[cepaSelect.selectedIndex]?.text || cepaSelect.value;
+                }
             });
 
             row.querySelectorAll('input[name="animal_cantidad"], input[name="animal_precioUnitario"]').forEach(input => {
                  input.addEventListener('input', updateAnimalesTotals);
             });
             
+            setupPrintSpans(row);
             updateAnimalesTotals(); 
-
             return row;
         }
         
@@ -492,7 +530,7 @@ Uso de CFDI: Señalar por parte del cliente.`;
         function updateAnimalesTotals() {
             let subtotal = 0;
             animalesTableBody.querySelectorAll('tr').forEach(row => {
-                const cantidad = Math.round(parseFloatInput(row.querySelector('input[name="animal_cantidad"]').value)); // Ensure integer
+                const cantidad = Math.round(parseFloatInput(row.querySelector('input[name="animal_cantidad"]').value));
                 const precioUnitario = parseFloatInput(row.querySelector('input[name="animal_precioUnitario"]').value);
                 const costoTotal = cantidad * precioUnitario;
                 row.querySelector('span[name="animal_costoTotal"]').textContent = formatCurrency(costoTotal);
@@ -540,7 +578,7 @@ Uso de CFDI: Señalar por parte del cliente.`;
                 <td class="px-2 py-0.5 whitespace-nowrap">
                     <select name="suministro_unidad" class="form-select-line w-full table-cell-select">
                         ${unidadesSuministro.map(u => `<option value="${u}"${item.unidad === u ? ' selected' : ''}>${u}</option>`).join('')}
-                    </select>
+                    </select><span class="print-only"></span>
                 </td>
                 <td class="px-2 py-0.5 whitespace-nowrap"><input type="number" name="suministro_precioUnitario" class="form-input-line w-full table-cell-input text-center-input" value="${item.precioUnitario || 0}" min="0" step="0.01"></td>
                 <td class="px-2 py-0.5 whitespace-nowrap text-right"><span name="suministro_costoTotal">${formatCurrency(0)}</span></td>
@@ -548,16 +586,17 @@ Uso de CFDI: Señalar por parte del cliente.`;
             `;
             const precioUnitarioSuministroInput = row.querySelector('input[name="suministro_precioUnitario"]');
             
-            // Format unit price to 2 decimal places on blur
             precioUnitarioSuministroInput.addEventListener('blur', (e) => {
                 const value = parseFloatInput(e.target.value);
                 e.target.value = value.toFixed(2);
-                updateSuministrosTotals(); // Recalculate totals after formatting
+                updateSuministrosTotals();
             });
 
              row.querySelectorAll('input[name="suministro_cantidad"], input[name="suministro_precioUnitario"]').forEach(input => {
                  input.addEventListener('input', updateSuministrosTotals);
             });
+            
+            setupPrintSpans(row);
             updateSuministrosTotals(); 
         }
         if(addSuministroRowButton) addSuministroRowButton.addEventListener('click', () => createSuministroRow());
