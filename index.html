@@ -27,8 +27,6 @@
             .section-hidden-print { display: none !important; }
             .page-break-before { page-break-before: always; } 
             #observaciones {
-                height: auto !important;
-                overflow: visible !important; /* Allow content to show */
                 border: none !important;
                 padding: 0 !important;
                 white-space: pre-wrap; /* Respect newlines and wrap text */
@@ -74,9 +72,9 @@
         .table-cell-input, .table-cell-select { 
             min-width: 60px; 
         }
-        .textarea-auto-height {
-            resize: none;
-            overflow-y: hidden; 
+        #observaciones[contenteditable="true"] {
+             white-space: pre-wrap;
+             word-wrap: break-word;
         }
         .info-grid {
             display: grid;
@@ -130,7 +128,7 @@
                 <p class="text-sm">No olvides descargar tu archivo JSON y el PDF por separado y agregarlos en la carpeta de ONEDRIVE.</p>
             </div>
              <p class="text-xs text-center text-gray-700">
-                <strong>Creado por Carlos Marin Aquino versión de sistema 1.1.3.</strong>
+                <strong>Creado por Carlos Marin Aquino versión de sistema 1.1.4.</strong>
             </p>
         </div>
     </div>
@@ -299,7 +297,7 @@
             <!-- Observaciones Section with reduced margins -->
             <section id="observacionesSection" class="mb-4">
                  <h2 class="text-base font-semibold text-slate-700 mb-1">Observaciones:</h2>
-                 <textarea id="observaciones" name="observaciones" rows="4" class="form-input-line mt-1 block w-full text-xs textarea-auto-height" placeholder="Añade tus observaciones o términos y condiciones de la cotización por favor"></textarea>
+                 <div id="observaciones" contenteditable="true" class="form-input-line mt-1 block w-full text-xs p-1"></div>
             </section>
 
             
@@ -370,7 +368,7 @@
         const addSuministroRowButton = document.getElementById('addSuministroRow');
         const toggleSuministrosCheckbox = document.getElementById('toggleSuministrosSection');
         const suministrosSectionElement = document.getElementById('suministrosSection');
-        const observacionesTextarea = document.getElementById('observaciones');
+        const observacionesElement = document.getElementById('observaciones');
         const aprobacionSection = document.getElementById('aprobacionSection'); 
 
         let animalPartidaCounter = 0; 
@@ -407,14 +405,6 @@ Uso de CFDI: Señalar por parte del cliente.`;
             return isNaN(num) ? 0 : num;
         };
         
-        function autoGrowTextarea(element) {
-            if(!element) return;
-            element.style.height = 'auto'; 
-            element.style.height = (element.scrollHeight) + 'px';
-        }
-        if(observacionesTextarea) observacionesTextarea.addEventListener('input', function() { autoGrowTextarea(this); });
-
-
         // --- PRINT-ONLY SPAN SETUP ---
         function setupPrintSpans(row) {
             const selects = row.querySelectorAll('select');
@@ -802,7 +792,7 @@ Uso de CFDI: Señalar por parte del cliente.`;
                 suministrosIVAPorcentaje: suministrosIVAPorcentajeInput ? parseFloatInput(suministrosIVAPorcentajeInput.value) : 16,
                 suministrosIVA: parseFloatInput(document.getElementById('suministrosIVA').textContent),
                 suministrosTotalNeto: parseFloatInput(document.getElementById('suministrosTotalNeto').textContent),
-                observaciones: observacionesTextarea ? observacionesTextarea.value : "",
+                observaciones: observacionesElement ? observacionesElement.innerText : "",
                 granTotalCotizacion: parseFloatInput(document.getElementById('granTotalCotizacion').textContent),
                 aprobacionFirma: document.getElementById('aprobacionFirma').value,
                 aprobacionNombre: document.getElementById('aprobacionNombre').value,
@@ -862,9 +852,8 @@ Uso de CFDI: Señalar por parte del cliente.`;
                         if(document.getElementById('suministrosDescuentoPorcentaje')) document.getElementById('suministrosDescuentoPorcentaje').value = data.suministrosDescuentoPorcentaje || 0;
                          if(suministrosIVAPorcentajeInput) suministrosIVAPorcentajeInput.value = data.suministrosIVAPorcentaje || 16;
 
-                        if(observacionesTextarea) {
-                            observacionesTextarea.value = data.observaciones || '';
-                            autoGrowTextarea(observacionesTextarea);
+                        if(observacionesElement) {
+                            observacionesElement.innerText = data.observaciones || '';
                         }
                         document.getElementById('aprobacionFirma').value = data.aprobacionFirma || '';
                         document.getElementById('aprobacionNombre').value = data.aprobacionNombre || '';
@@ -891,9 +880,8 @@ Uso de CFDI: Señalar por parte del cliente.`;
         });
         
         function initializeQuote() {
-            if(observacionesTextarea) {
-                 observacionesTextarea.value = defaultObservacionesText;
-                 setTimeout(() => autoGrowTextarea(observacionesTextarea), 0);
+            if(observacionesElement) {
+                 observacionesElement.innerText = defaultObservacionesText;
             }
             if(toggleSuministrosCheckbox) {
                 toggleSuministrosCheckbox.checked = false; 
