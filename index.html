@@ -24,8 +24,16 @@
             .section-hidden-print { display: none !important; }
             textarea { overflow: hidden !important; height: auto !important; }
             .page-break-before { page-break-before: always; } 
+            #observaciones {
+                height: auto !important;
+                overflow: visible !important; /* Allow content to show */
+                border: none !important;
+                padding: 0 !important;
+                white-space: pre-wrap; /* Respect newlines and wrap text */
+                word-break: break-word;
+            }
         }
-       
+        
         input[type="number"]::-webkit-inner-spin-button,
         input[type="number"]::-webkit-outer-spin-button {
             -webkit-appearance: none;
@@ -79,6 +87,12 @@
         .delete-item-btn:hover {
             color: #b91c1c; /* red-700 */
         }
+        .text-justify-custom {
+            text-align: justify;
+        }
+        .text-center-input {
+            text-align: center;
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -101,7 +115,7 @@
                 <p class="text-sm">No olvides descargar tu archivo JSON y el PDF por separado y agregarlos en la carpeta de ONEDRIVE.</p>
             </div>
              <p class="text-xs text-center text-gray-700">
-                <strong>Creado por Carlos Marin Aquino versión de sistema 1.0.6.</strong>
+                <strong>Creado por Carlos Marin Aquino versión de sistema 1.1.1.</strong>
             </p>
         </div>
     </div>
@@ -109,14 +123,14 @@
     <div id="quoteFormContainer" class="p-2 md:p-4">
         <!-- Main container with reduced padding -->
         <div id="printableArea" class="max-w-4xl mx-auto bg-white shadow-xl rounded-lg p-4 md:p-6 print:shadow-none">
-         
+        
             <!-- Header section with reduced margins -->
             <header class="mb-4 pb-2 border-b border-gray-300">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
                     <div>
                         <!-- Reduced logo size -->
                         <img id="companyLogo" src="https://cdn1.site-media.eu/images/0/11703076/Logo_MAS.png" alt="Logo de la Compañía" class="h-12 sm:h-16 mb-2 sm:mb-0">
-                        <p class="text-xs text-gray-600">Boulevard Adolfo López Mateos Número 2235, quinto piso,</p>
+                        <p class="text-xs text-gray-600">Boulevard Adolfo López Mateos Número 2235, Piso 5,</p>
                         <p class="text-xs text-gray-600">Colonia Las Águilas, Alcaldía Álvaro Obregón, 01710 Ciudad de México.</p>
                         <p class="text-xs text-gray-800">RFC: MAS190523PN6</p>
                     </div>
@@ -154,7 +168,7 @@
                 </div>
             </header>
 
-   
+    
             <!-- Animales Section with reduced margins -->
             <section id="animalesSection" class="mb-4">
                 <h2 class="text-lg font-semibold text-slate-700 mb-2">Animales</h2>
@@ -210,7 +224,7 @@
                 <input type="checkbox" id="toggleSuministrosSection" class="form-checkbox h-4 w-4 text-emerald-600 border-gray-300 rounded focus:ring-emerald-500">
                 <label for="toggleSuministrosSection" class="text-sm font-medium text-gray-700">Incluir Sección de Otros Productos / Suministros</label>
             </div>
-           
+            
             <!-- Suministros Section with reduced margins -->
             <section id="suministrosSection" class="mb-4"> 
                 <h2 class="text-lg font-semibold text-slate-700 mb-2">Otros Productos / Suministros</h2>
@@ -255,81 +269,81 @@
                 </div>
             </section>
 
-           
+            
             <!-- Grand Total Section with reduced margins, padding, and text size -->
             <section id="grandTotalSection" class="my-4 py-2 border-t-2 border-b-2 border-slate-700">
                  <div class="text-right space-y-1">
-                      <div class="grid grid-cols-3 items-center">
-                            <span class="col-span-2 text-xl font-bold text-slate-800">GRAN TOTAL en MXN:</span>
-                            <span id="granTotalCotizacion" class="text-xl font-bold text-slate-800">$0.00</span>
-                      </div>
+                       <div class="grid grid-cols-3 items-center">
+                             <span class="col-span-2 text-xl font-bold text-slate-800">GRAN TOTAL en MXN:</span>
+                             <span id="granTotalCotizacion" class="text-xl font-bold text-slate-800">$0.00</span>
+                       </div>
                  </div>
             </section>
 
-           
+            
             <!-- Observaciones Section with reduced margins -->
             <section id="observacionesSection" class="mb-4">
                  <h2 class="text-base font-semibold text-slate-700 mb-1">Observaciones:</h2>
                  <textarea id="observaciones" name="observaciones" rows="4" class="form-input-line mt-1 block w-full text-xs textarea-auto-height" placeholder="Añade tus observaciones o términos y condiciones de la cotización por favor"></textarea>
             </section>
 
-           
+            
             <!-- Aprobacion Section with reduced margins and padding -->
             <section id="aprobacionSection" class="mb-4 pt-4 border-t border-gray-300 page-break-before"> 
                  <div class="bg-gray-100 p-2 rounded-md my-2">
-                      <h3 class="font-semibold text-slate-700 mb-1 text-sm">DECLARATORIA</h3>
-                      <p class="text-xs text-gray-600">Los modelos animales que Modelos Animales y Servicios S.A. de C.V. ofrece están licenciados por Harlan Laboratories Israel y no pueden ser reproducidos para fines comerciales. La información contenida en este documento es propiedad de Modelos Animales y Servicios S.A. de C.V. y no podrá ser utilizada o reproducida por ningún medio sin el consentimiento y autorización por escrito de la empresa.</p>
+                       <h3 class="font-semibold text-slate-700 mb-1 text-sm">DECLARATORIA</h3>
+                       <p class="text-xs text-gray-600 text-justify-custom">Los modelos animales que Modelos Animales y Servicios S.A. de C.V. ofrece están licenciados por Harlan Laboratories Israel y no pueden ser reproducidos para fines comerciales. La información contenida en este documento es propiedad de Modelos Animales y Servicios S.A. de C.V. y no podrá ser utilizada o reproducida por ningún medio sin el consentimiento y autorización por escrito de la empresa.</p>
                  </div>
                  <p class="font-bold text-gray-600 mb-2 text-center text-sm">Quedamos a sus órdenes para cualquier duda o comentario.</p>
                  
                  <div class="mt-4 mb-6 text-center">
-                      <div class="mb-1 h-16 flex justify-center items-center"> 
-                          <img id="signatureImage" src="https://cdn1.site-media.eu/images/0/16383443/3bK9sR2vPqLmY7cW1xZ0aGjNfUoE6hI4dXtC5mVbzAeFpQyS8rJnTu-5w-m3ZT_q2m5lSr0DvHvZw.png" alt="Firma" class="max-h-full">
-                      </div>
-                      <input type="text" id="directoraNombre" class="form-input-line w-64 mx-auto block text-center text-sm" value="Lic. Mónica Valdivia Ponce">
-                      <p class="text-xs text-gray-700">Directora General</p>
-                      <p class="text-xs text-gray-700">Modelos Animales y Servicios, S.A. de C.V.</p>
+                       <div class="mb-1 h-16 flex justify-center items-center"> 
+                           <img id="signatureImage" src="https://cdn1.site-media.eu/images/0/16383443/3bK9sR2vPqLmY7cW1xZ0aGjNfUoE6hI4dXtC5mVbzAeFpQyS8rJnTu-5w-m3ZT_q2m5lSr0DvHvZw.png" alt="Firma" class="max-h-full">
+                       </div>
+                       <input type="text" id="directoraNombre" class="form-input-line w-64 mx-auto block text-center text-sm" value="Lic. Mónica Valdivia Ponce">
+                       <p class="text-xs text-gray-700">Directora General</p>
+                       <p class="text-xs text-gray-700">Modelos Animales y Servicios, S.A. de C.V.</p>
                  </div>
 
                  <h2 class="text-base font-semibold text-slate-700 mb-2">Aprobación de la cotización:</h2>
-                 <p class="text-xs text-gray-600 mb-3">(Favor de llenar este espacio y enviar la cotización completa escaneada, si se está de acuerdo con la misma, en el momento de recibirla se considerará aprobada por el cliente)</p>
+                 <p class="text-xs text-gray-600 mb-3 text-justify-custom">(Favor de llenar este espacio y enviar la cotización completa escaneada, si se está de acuerdo con la misma, en el momento de recibirla se considerará aprobada por el cliente)</p>
                  
                  <div class="approval-grid text-sm"> 
-                      <div class="flex flex-col"> 
-                          <label for="aprobacionNombre" class="block font-medium text-gray-700">Nombre:</label>
-                          <input type="text" id="aprobacionNombre" name="aprobacionNombre" class="form-input-line mt-1 block w-full">
-                      </div>
-                      <div class="flex flex-col"> 
-                          <label for="aprobacionFirma" class="block font-medium text-gray-700">Firma:</label>
-                          <input type="text" id="aprobacionFirma" name="aprobacionFirma" class="form-input-line mt-1 block w-full">
-                      </div>
-                      <div class="flex flex-col md:col-span-2"> 
-                          <label for="aprobacionCargo" class="block font-medium text-gray-700">Cargo:</label>
-                          <input type="text" id="aprobacionCargo" name="aprobacionCargo" class="form-input-line mt-1 block w-full">
-                      </div>
-                      <div class="flex flex-col md:col-span-2"> 
-                          <label for="aprobacionRazonSocial" class="block font-medium text-gray-700">Nombre completo (persona física) o Denominación Completa (razón social):</label>
-                          <input type="text" id="aprobacionRazonSocial" name="aprobacionRazonSocial" class="form-input-line mt-1 block w-full">
-                      </div>
-                      <div class="flex flex-col"> 
-                          <label for="aprobacionTelefono" class="block font-medium text-gray-700">Teléfono:</label>
-                          <input type="tel" id="aprobacionTelefono" name="aprobacionTelefono" class="form-input-line mt-1 block w-full">
-                      </div>
-                      <div class="flex flex-col"> 
-                          <label for="aprobacionEmail" class="block font-medium text-gray-700">e-mail:</label>
-                          <input type="email" id="aprobacionEmail" name="aprobacionEmail" class="form-input-line mt-1 block w-full">
-                      </div>
-                      <div class="flex flex-col md:col-span-2"> 
-                          <label for="aprobacionFecha" class="block font-medium text-gray-700">Fecha de Aprobación:</label>
-                          <input type="text" id="aprobacionFecha" name="aprobacionFecha" class="form-input-line mt-1 block w-full">
-                      </div>
+                       <div class="flex flex-col"> 
+                           <label for="aprobacionNombre" class="block font-medium text-gray-700">Nombre:</label>
+                           <input type="text" id="aprobacionNombre" name="aprobacionNombre" class="form-input-line mt-1 block w-full">
+                       </div>
+                       <div class="flex flex-col"> 
+                           <label for="aprobacionFirma" class="block font-medium text-gray-700">Firma:</label>
+                           <input type="text" id="aprobacionFirma" name="aprobacionFirma" class="form-input-line mt-1 block w-full">
+                       </div>
+                       <div class="flex flex-col md:col-span-2"> 
+                           <label for="aprobacionCargo" class="block font-medium text-gray-700">Cargo:</label>
+                           <input type="text" id="aprobacionCargo" name="aprobacionCargo" class="form-input-line mt-1 block w-full">
+                       </div>
+                       <div class="flex flex-col md:col-span-2"> 
+                           <label for="aprobacionRazonSocial" class="block font-medium text-gray-700">Nombre completo (persona física) o Denominación Completa (razón social):</label>
+                           <input type="text" id="aprobacionRazonSocial" name="aprobacionRazonSocial" class="form-input-line mt-1 block w-full">
+                       </div>
+                       <div class="flex flex-col"> 
+                           <label for="aprobacionTelefono" class="block font-medium text-gray-700">Teléfono:</label>
+                           <input type="tel" id="aprobacionTelefono" name="aprobacionTelefono" class="form-input-line mt-1 block w-full">
+                       </div>
+                       <div class="flex flex-col"> 
+                           <label for="aprobacionEmail" class="block font-medium text-gray-700">e-mail:</label>
+                           <input type="email" id="aprobacionEmail" name="aprobacionEmail" class="form-input-line mt-1 block w-full">
+                       </div>
+                       <div class="flex flex-col md:col-span-2"> 
+                           <label for="aprobacionFecha" class="block font-medium text-gray-700">Fecha de Aprobación:</label>
+                           <input type="text" id="aprobacionFecha" name="aprobacionFecha" class="form-input-line mt-1 block w-full">
+                       </div>
                  </div>
             </section>
 
             <!-- Footer with reduced margins -->
             <footer class="mt-6 pt-4 border-t border-gray-300 text-center text-xs text-gray-500">
-                  <p>Blvd. Adolfo López Mateos 2235, Int. Piso 5, Col. Las Águilas, Álvaro Obregón, 01710, Ciudad de México.</p>
-                  <p>Tels. 55-5622 4800 Ext. 84047 | email: ventas@modelosanimales.com.mx</p>
+                  <p class="text-justify-custom">Blvd. Adolfo López Mateos 2235, Int. Piso 5, Col. Las Águilas, Álvaro Obregón, 01710, Ciudad de México.</p>
+                  <p class="text-justify-custom">Tels. 55-5622 4800 Ext. 84047 | email: ventas@modelosanimales.com.mx</p>
             </footer>
         </div>
     </div>
@@ -348,10 +362,26 @@
         let suministroPartidaCounter = 0; 
 
         const cepasPorEspecie = {
-            "Ratón": ["C57BL/6", "ICR CD-1", "BALB/c"],
-            "Rata": ["Wistar", "S. Dawley"]
+            "Ratón": ["C57BL/6JOlaHsd", "BALB/cOlaHsd", "Hsd:ICR (CD-1®)"],
+            "Rata": ["RccHan®:WIST", "Hsd:Sprague Dawley®SD®"]
         };
         const unidadesSuministro = ["Kg", "Pza.", "Bulto"];
+        
+        const defaultObservacionesText = `Esta mercancía grava tasa "0" de IVA.
+____________________________________________________________________________________
+Los productos se entregarán en el domicilio señalado por el cliente.
+Aceptada la cotización por parte del cliente, se programará la entrega.
+____________________________________________________________________________________
+Disposición inmediata de los animales.
+Estos precios reflejan el descuento de orden de compra recurrente.
+Crédito de 30 días a partir del ingreso de la factura a revisión.
+Vigencia de esta cotización hasta el 31 de julio de 2025.
+____________________________________________________________________________________
+Facturación
+Método de pago: PPD - Pago en parcialidades o diferido
+Forma de pago: Transferencia electrónica de fondos
+Uso de CFDI: Señalar por parte del cliente.`;
+
 
         // --- UTILITIES ---
         const formatCurrency = (value) => {
@@ -361,7 +391,7 @@
             const num = parseFloat(String(value).replace(/[^0-9.-]+/g,""));
             return isNaN(num) ? 0 : num;
         };
-       
+        
         function autoGrowTextarea(element) {
             if(!element) return;
             element.style.height = 'auto'; 
@@ -421,14 +451,14 @@
                         <option value="Hembra"${item.sexo === 'Hembra' ? ' selected' : ''}>Hembra</option>
                     </select>
                 </td>
-                <td class="px-2 py-0.5 whitespace-nowrap"><input type="text" name="animal_edad" class="form-input-line w-full table-cell-input" value="${item.edad || ''}"></td>
-                <td class="px-2 py-0.5 whitespace-nowrap"><input type="text" name="animal_peso" class="form-input-line w-full table-cell-input" value="${item.pesoGr || ''}"></td>
-                <td class="px-2 py-0.5 whitespace-nowrap"><input type="number" name="animal_cantidad" class="form-input-line w-full table-cell-input" value="${item.cantidad || 1}" min="0" step="1"></td>
-                <td class="px-2 py-0.5 whitespace-nowrap"><input type="number" name="animal_precioUnitario" class="form-input-line w-full table-cell-input" value="${item.precioUnitario || 0}" min="0" step="0.01"></td>
+                <td class="px-2 py-0.5 whitespace-nowrap"><input type="text" name="animal_edad" class="form-input-line w-full table-cell-input text-center-input" value="${item.edad || ''}"></td>
+                <td class="px-2 py-0.5 whitespace-nowrap"><input type="text" name="animal_peso" class="form-input-line w-full table-cell-input text-center-input" value="${item.pesoGr || ''}"></td>
+                <td class="px-2 py-0.5 whitespace-nowrap"><input type="number" name="animal_cantidad" class="form-input-line w-full table-cell-input text-center-input" value="${item.cantidad || 1}" min="0" step="1"></td>
+                <td class="px-2 py-0.5 whitespace-nowrap"><input type="number" name="animal_precioUnitario" class="form-input-line w-full table-cell-input text-center-input" value="${item.precioUnitario || 0}" min="0" step="0.01"></td>
                 <td class="px-2 py-0.5 whitespace-nowrap text-right"><span name="animal_costoTotal">${formatCurrency(0)}</span></td>
                 <td class="px-1 py-0.5 text-center no-print"><button type="button" class="delete-item-btn" title="Eliminar Partida" data-rowid="${row.id}">&times;</button></td>
             `;
-           
+            
             const especieSelect = row.querySelector('select[name="animal_especie"]');
             const cepaSelect = row.querySelector('select[name="animal_cepa"]');
             const precioUnitarioInput = row.querySelector('input[name="animal_precioUnitario"]');
@@ -444,7 +474,7 @@
             if (item.cepa) { 
                 cepaSelect.value = item.cepa;
             }
-           
+            
             especieSelect.addEventListener('change', function() {
                 updateCepaOptionsForRow(this, cepaSelect);
             });
@@ -452,12 +482,12 @@
             row.querySelectorAll('input[name="animal_cantidad"], input[name="animal_precioUnitario"]').forEach(input => {
                  input.addEventListener('input', updateAnimalesTotals);
             });
-           
+            
             updateAnimalesTotals(); 
 
             return row;
         }
-       
+        
         addAnimalRowButton.addEventListener('click', () => createAnimalRow());
 
         function updateAnimalesTotals() {
@@ -471,11 +501,11 @@
             });
 
             document.getElementById('animalesSubtotal').textContent = formatCurrency(subtotal);
-           
+            
             const descuentoPorcentajeAnimales = parseFloatInput(document.getElementById('animalesDescuentoPorcentaje').value) / 100;
             const descuentoMontoAnimales = subtotal * descuentoPorcentajeAnimales;
             document.getElementById('animalesDescuentoMonto').textContent = formatCurrency(-descuentoMontoAnimales);
-           
+            
             const baseIVAnimales = subtotal - descuentoMontoAnimales;
             const ivaPorcentajeAnimales = parseFloatInput(document.getElementById('animalesIVAPorcentaje').value) / 100;
             const ivaMontoAnimales = baseIVAnimales * ivaPorcentajeAnimales;
@@ -507,13 +537,13 @@
             row.innerHTML = `
                 <td class="px-2 py-0.5 whitespace-nowrap text-center">${partidaNum}</td>
                 <td class="px-2 py-0.5"><input type="text" name="suministro_descripcion" class="form-input-line w-full table-cell-input" value="${item.descripcion || ''}"></td>
-                <td class="px-2 py-0.5 whitespace-nowrap"><input type="number" name="suministro_cantidad" class="form-input-line w-full table-cell-input" value="${item.cantidad || 1}" min="0" step="any"></td>
+                <td class="px-2 py-0.5 whitespace-nowrap"><input type="number" name="suministro_cantidad" class="form-input-line w-full table-cell-input text-center-input" value="${item.cantidad || 1}" min="0" step="any"></td>
                 <td class="px-2 py-0.5 whitespace-nowrap">
                     <select name="suministro_unidad" class="form-select-line w-full table-cell-select">
                         ${unidadesSuministro.map(u => `<option value="${u}"${item.unidad === u ? ' selected' : ''}>${u}</option>`).join('')}
                     </select>
                 </td>
-                <td class="px-2 py-0.5 whitespace-nowrap"><input type="number" name="suministro_precioUnitario" class="form-input-line w-full table-cell-input" value="${item.precioUnitario || 0}" min="0" step="0.01"></td>
+                <td class="px-2 py-0.5 whitespace-nowrap"><input type="number" name="suministro_precioUnitario" class="form-input-line w-full table-cell-input text-center-input" value="${item.precioUnitario || 0}" min="0" step="0.01"></td>
                 <td class="px-2 py-0.5 whitespace-nowrap text-right"><span name="suministro_costoTotal">${formatCurrency(0)}</span></td>
                 <td class="px-1 py-0.5 text-center no-print"><button type="button" class="delete-item-btn" title="Eliminar Partida" data-rowid="${row.id}">&times;</button></td>
             `;
@@ -550,7 +580,7 @@
             }
 
             document.getElementById('suministrosSubtotal').textContent = formatCurrency(subtotal);
-           
+            
             const descuentoPorcentajeSuministros = parseFloatInput(document.getElementById('suministrosDescuentoPorcentaje').value) / 100;
             const descuentoMontoSuministros = subtotal * descuentoPorcentajeSuministros;
             document.getElementById('suministrosDescuentoMonto').textContent = formatCurrency(-descuentoMontoSuministros);
@@ -559,7 +589,7 @@
             const ivaPorcentajeSuministros = parseFloatInput(document.getElementById('suministrosIVAPorcentaje').value) / 100;
             const ivaMontoSuministros = baseIVASuministros * ivaPorcentajeSuministros;
             document.getElementById('suministrosIVA').textContent = formatCurrency(ivaMontoSuministros);
-           
+            
             const totalSuministrosNeto = baseIVASuministros + ivaMontoSuministros;
             document.getElementById('suministrosTotalNeto').textContent = formatCurrency(totalSuministrosNeto);
             updateGranTotalCotizacion();
@@ -608,7 +638,7 @@
                 }
             }
         });
-       
+        
         function updateGranTotalCotizacion() {
             const totalAnimales = parseFloatInput(document.getElementById('animalesTotalNeto').textContent);
             let totalSuministros = 0;
@@ -647,7 +677,7 @@
             try {
                 if (aprobacionSection) { 
                     aprobacionSection.classList.remove('page-break-before-managed-pdf'); 
-                   
+                    
                     if (toggleSuministrosCheckbox && document.getElementById('animalesSection') && document.getElementById('observacionesSection')) {
                         if (!toggleSuministrosCheckbox.checked) {
                             const alturaContenidoEstimada = document.getElementById('animalesSection').offsetHeight + 
@@ -672,7 +702,7 @@
             } catch (error) {
                 console.error("Error during print preparation:", error);
             }
-           
+            
             console.log("Calling window.print()...");
             window.print();
 
@@ -689,10 +719,10 @@
                 animalesData.push({
                     partidaNum: parseInt(row.dataset.partidaNum, 10),
                     especie: row.querySelector('select[name="animal_especie"]').value, 
-                    cepa: row.querySelector('select[name="animal_cepa"]').value,     
-                    sexo: row.querySelector('select[name="animal_sexo"]').value,     
-                    edad: row.querySelector('input[name="animal_edad"]').value,     
-                    pesoGr: row.querySelector('input[name="animal_peso"]').value,     
+                    cepa: row.querySelector('select[name="animal_cepa"]').value,    
+                    sexo: row.querySelector('select[name="animal_sexo"]').value,    
+                    edad: row.querySelector('input[name="animal_edad"]').value,    
+                    pesoGr: row.querySelector('input[name="animal_peso"]').value,    
                     cantidad: parseFloatInput(row.querySelector('input[name="animal_cantidad"]').value),
                     precioUnitario: parseFloatInput(row.querySelector('input[name="animal_precioUnitario"]').value), 
                     costoTotal: parseFloatInput(row.querySelector('span[name="animal_costoTotal"]').textContent)
@@ -765,7 +795,7 @@
                 reader.onload = function(e) {
                     try {
                         const data = JSON.parse(e.target.result);
-                       
+                        
                         document.getElementById('cliente').value = data.cliente || '';
                         document.getElementById('contacto').value = data.contacto || '';
                         document.getElementById('cotizacionNum').value = data.cotizacionNum || '';
@@ -784,11 +814,11 @@
                         }
                         document.getElementById('animalesDescuentoPorcentaje').value = data.animalesDescuentoPorcentaje || 10;
                         document.getElementById('animalesIVAPorcentaje').value = data.animalesIVAPorcentaje || 0; 
-                       
+                        
                         suministrosTableBody.innerHTML = '';
                         suministroPartidaCounter = 0; 
                         if(toggleSuministrosCheckbox) toggleSuministrosCheckbox.checked = data.suministrosIncluidos !== undefined ? data.suministrosIncluidos : false; 
-                       
+                        
                         if (toggleSuministrosCheckbox && toggleSuministrosCheckbox.checked && data.suministros && Array.isArray(data.suministros)) {
                             data.suministros.forEach(item => createSuministroRow(item));
                         }
@@ -811,7 +841,7 @@
                         if(toggleSuministrosCheckbox) toggleSuministrosVisibility(); 
                         updateAnimalesTotals(); 
                         updateSuministrosTotals(); 
-                       
+                        
                         console.log('Datos importados correctamente.');
                     } catch (error) {
                         console.error('Error al importar JSON:', error);
@@ -822,9 +852,10 @@
                 event.target.value = null; 
             }
         });
-       
+        
         function initializeQuote() {
             if(observacionesTextarea) {
+                 observacionesTextarea.value = defaultObservacionesText;
                  autoGrowTextarea(observacionesTextarea);
             }
             if(toggleSuministrosCheckbox) {
