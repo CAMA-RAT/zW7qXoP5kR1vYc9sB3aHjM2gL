@@ -128,7 +128,7 @@
                 <p class="text-sm">No olvides descargar tu archivo JSON y el PDF por separado y agregarlos en la carpeta de ONEDRIVE.</p>
             </div>
              <p class="text-xs text-center text-gray-700">
-                <strong>Creado por Carlos Marin Aquino versión de sistema 1.1.4.</strong>
+                <strong>Creado por Carlos Marin Aquino versión de sistema 1.1.5.</strong>
             </p>
         </div>
     </div>
@@ -232,7 +232,7 @@
                 </div>
             </section>
 
-      
+    
             <div class="mb-2 flex items-center gap-2 no-print">
                 <input type="checkbox" id="toggleSuministrosSection" class="form-checkbox h-4 w-4 text-emerald-600 border-gray-300 rounded focus:ring-emerald-500">
                 <label for="toggleSuministrosSection" class="text-sm font-medium text-gray-700">Incluir Sección de Otros Productos / Suministros</label>
@@ -286,10 +286,10 @@
             <!-- Grand Total Section with reduced margins, padding, and text size -->
             <section id="grandTotalSection" class="my-4 py-2 border-t-2 border-b-2 border-slate-700">
                  <div class="text-right space-y-1">
-                       <div class="grid grid-cols-3 items-center">
-                             <span class="col-span-2 text-xl font-bold text-slate-800">GRAN TOTAL en MXN:</span>
-                             <span id="granTotalCotizacion" class="text-xl font-bold text-slate-800">$0.00</span>
-                       </div>
+                         <div class="grid grid-cols-3 items-center">
+                               <span class="col-span-2 text-xl font-bold text-slate-800">GRAN TOTAL en MXN:</span>
+                               <span id="granTotalCotizacion" class="text-xl font-bold text-slate-800">$0.00</span>
+                         </div>
                  </div>
             </section>
 
@@ -304,52 +304,52 @@
             <!-- Aprobacion Section with reduced margins and padding -->
             <section id="aprobacionSection" class="mb-4 pt-4 border-t border-gray-300 page-break-before"> 
                  <div class="bg-gray-100 p-2 rounded-md my-2">
-                       <h3 class="font-semibold text-slate-700 mb-1 text-sm">DECLARATORIA</h3>
-                       <p class="text-xs text-gray-600 text-justify-custom">Los modelos animales que Modelos Animales y Servicios S.A. de C.V. ofrece están licenciados por Harlan Laboratories Israel y no pueden ser reproducidos para fines comerciales. La información contenida en este documento es propiedad de Modelos Animales y Servicios S.A. de C.V. y no podrá ser utilizada o reproducida por ningún medio sin el consentimiento y autorización por escrito de la empresa.</p>
+                         <h3 class="font-semibold text-slate-700 mb-1 text-sm">DECLARATORIA</h3>
+                         <p class="text-xs text-gray-600 text-justify-custom">Los modelos animales que Modelos Animales y Servicios S.A. de C.V. ofrece están licenciados por Harlan Laboratories Israel y no pueden ser reproducidos para fines comerciales. La información contenida en este documento es propiedad de Modelos Animales y Servicios S.A. de C.V. y no podrá ser utilizada o reproducida por ningún medio sin el consentimiento y autorización por escrito de la empresa.</p>
                  </div>
                  <p class="font-bold text-gray-600 mb-2 text-center text-sm">Quedamos a sus órdenes para cualquier duda o comentario.</p>
                  
                  <div class="mt-4 mb-6 text-center">
-                       <div class="mb-1 h-16 flex justify-center items-center"> 
-                           <img id="signatureImage" src="https://cdn1.site-media.eu/images/0/16383443/3bK9sR2vPqLmY7cW1xZ0aGjNfUoE6hI4dXtC5mVbzAeFpQyS8rJnTu-5w-m3ZT_q2m5lSr0DvHvZw.png" alt="Firma" class="max-h-full">
-                       </div>
-                       <input type="text" id="directoraNombre" class="form-input-line w-64 mx-auto block text-center text-sm" value="Lic. Mónica Valdivia Ponce">
-                       <p class="text-xs text-gray-700">Directora General</p>
-                       <p class="text-xs text-gray-700">Modelos Animales y Servicios, S.A. de C.V.</p>
+                         <div class="mb-1 h-16 flex justify-center items-center"> 
+                             <img id="signatureImage" src="https://cdn1.site-media.eu/images/0/16383443/3bK9sR2vPqLmY7cW1xZ0aGjNfUoE6hI4dXtC5mVbzAeFpQyS8rJnTu-5w-m3ZT_q2m5lSr0DvHvZw.png" alt="Firma" class="max-h-full">
+                         </div>
+                         <input type="text" id="directoraNombre" class="form-input-line w-64 mx-auto block text-center text-sm" value="Lic. Mónica Valdivia Ponce">
+                         <p class="text-xs text-gray-700">Directora General</p>
+                         <p class="text-xs text-gray-700">Modelos Animales y Servicios, S.A. de C.V.</p>
                  </div>
 
                  <h2 class="text-base font-semibold text-slate-700 mb-2">Aprobación de la cotización:</h2>
                  <p class="text-xs text-gray-600 mb-3 text-justify-custom">(Favor de llenar este espacio y enviar la cotización completa escaneada, si se está de acuerdo con la misma, en el momento de recibirla se considerará aprobada por el cliente)</p>
                  
                  <div class="approval-grid text-sm"> 
-                       <div class="flex flex-col"> 
-                           <label for="aprobacionNombre" class="block font-medium text-gray-700">Nombre:</label>
-                           <input type="text" id="aprobacionNombre" name="aprobacionNombre" class="form-input-line mt-1 block w-full">
-                       </div>
-                       <div class="flex flex-col"> 
-                           <label for="aprobacionFirma" class="block font-medium text-gray-700">Firma:</label>
-                           <input type="text" id="aprobacionFirma" name="aprobacionFirma" class="form-input-line mt-1 block w-full">
-                       </div>
-                       <div class="flex flex-col md:col-span-2"> 
-                           <label for="aprobacionCargo" class="block font-medium text-gray-700">Cargo:</label>
-                           <input type="text" id="aprobacionCargo" name="aprobacionCargo" class="form-input-line mt-1 block w-full">
-                       </div>
-                       <div class="flex flex-col md:col-span-2"> 
-                           <label for="aprobacionRazonSocial" class="block font-medium text-gray-700">Nombre completo (persona física) o Denominación Completa (razón social):</label>
-                           <input type="text" id="aprobacionRazonSocial" name="aprobacionRazonSocial" class="form-input-line mt-1 block w-full">
-                       </div>
-                       <div class="flex flex-col"> 
-                           <label for="aprobacionTelefono" class="block font-medium text-gray-700">Teléfono:</label>
-                           <input type="tel" id="aprobacionTelefono" name="aprobacionTelefono" class="form-input-line mt-1 block w-full">
-                       </div>
-                       <div class="flex flex-col"> 
-                           <label for="aprobacionEmail" class="block font-medium text-gray-700">e-mail:</label>
-                           <input type="email" id="aprobacionEmail" name="aprobacionEmail" class="form-input-line mt-1 block w-full">
-                       </div>
-                       <div class="flex flex-col md:col-span-2"> 
-                           <label for="aprobacionFecha" class="block font-medium text-gray-700">Fecha de Aprobación:</label>
-                           <input type="text" id="aprobacionFecha" name="aprobacionFecha" class="form-input-line mt-1 block w-full">
-                       </div>
+                         <div class="flex flex-col"> 
+                             <label for="aprobacionNombre" class="block font-medium text-gray-700">Nombre:</label>
+                             <input type="text" id="aprobacionNombre" name="aprobacionNombre" class="form-input-line mt-1 block w-full">
+                         </div>
+                         <div class="flex flex-col"> 
+                             <label for="aprobacionFirma" class="block font-medium text-gray-700">Firma:</label>
+                             <input type="text" id="aprobacionFirma" name="aprobacionFirma" class="form-input-line mt-1 block w-full">
+                         </div>
+                         <div class="flex flex-col md:col-span-2"> 
+                             <label for="aprobacionCargo" class="block font-medium text-gray-700">Cargo:</label>
+                             <input type="text" id="aprobacionCargo" name="aprobacionCargo" class="form-input-line mt-1 block w-full">
+                         </div>
+                         <div class="flex flex-col md:col-span-2"> 
+                             <label for="aprobacionRazonSocial" class="block font-medium text-gray-700">Nombre completo (persona física) o Denominación Completa (razón social):</label>
+                             <input type="text" id="aprobacionRazonSocial" name="aprobacionRazonSocial" class="form-input-line mt-1 block w-full">
+                         </div>
+                         <div class="flex flex-col"> 
+                             <label for="aprobacionTelefono" class="block font-medium text-gray-700">Teléfono:</label>
+                             <input type="tel" id="aprobacionTelefono" name="aprobacionTelefono" class="form-input-line mt-1 block w-full">
+                         </div>
+                         <div class="flex flex-col"> 
+                             <label for="aprobacionEmail" class="block font-medium text-gray-700">e-mail:</label>
+                             <input type="email" id="aprobacionEmail" name="aprobacionEmail" class="form-input-line mt-1 block w-full">
+                         </div>
+                         <div class="flex flex-col md:col-span-2"> 
+                             <label for="aprobacionFecha" class="block font-medium text-gray-700">Fecha de Aprobación:</label>
+                             <input type="text" id="aprobacionFecha" name="aprobacionFecha" class="form-input-line mt-1 block w-full">
+                         </div>
                  </div>
             </section>
 
@@ -473,6 +473,7 @@ Uso de CFDI: Señalar por parte del cliente.`;
                         <option value="">Seleccione Sexo</option>
                         <option value="Macho"${item.sexo === 'Macho' ? ' selected' : ''}>Macho</option>
                         <option value="Hembra"${item.sexo === 'Hembra' ? ' selected' : ''}>Hembra</option>
+                        <option value="Indistinto"${item.sexo === 'Indistinto' ? ' selected' : ''}>Indistinto</option>
                     </select><span class="print-only"></span>
                 </td>
                 <td class="px-2 py-0.5 whitespace-nowrap"><input type="text" name="animal_edad" class="form-input-line w-full table-cell-input text-center-input" value="${item.edad || ''}"></td>
@@ -746,10 +747,10 @@ Uso de CFDI: Señalar por parte del cliente.`;
                 animalesData.push({
                     partidaNum: parseInt(row.dataset.partidaNum, 10),
                     especie: row.querySelector('select[name="animal_especie"]').value, 
-                    cepa: row.querySelector('select[name="animal_cepa"]').value,    
-                    sexo: row.querySelector('select[name="animal_sexo"]').value,    
-                    edad: row.querySelector('input[name="animal_edad"]').value,    
-                    pesoGr: row.querySelector('input[name="animal_peso"]').value,    
+                    cepa: row.querySelector('select[name="animal_cepa"]').value,   
+                    sexo: row.querySelector('select[name="animal_sexo"]').value,   
+                    edad: row.querySelector('input[name="animal_edad"]').value,   
+                    pesoGr: row.querySelector('input[name="animal_peso"]').value,   
                     cantidad: parseFloatInput(row.querySelector('input[name="animal_cantidad"]').value),
                     precioUnitario: parseFloatInput(row.querySelector('input[name="animal_precioUnitario"]').value), 
                     costoTotal: parseFloatInput(row.querySelector('span[name="animal_costoTotal"]').textContent)
@@ -853,7 +854,7 @@ Uso de CFDI: Señalar por parte del cliente.`;
                          if(suministrosIVAPorcentajeInput) suministrosIVAPorcentajeInput.value = data.suministrosIVAPorcentaje || 16;
 
                         if(observacionesElement) {
-                            observacionesElement.innerText = data.observaciones || '';
+                             observacionesElement.innerText = data.observaciones || '';
                         }
                         document.getElementById('aprobacionFirma').value = data.aprobacionFirma || '';
                         document.getElementById('aprobacionNombre').value = data.aprobacionNombre || '';
@@ -896,3 +897,4 @@ Uso de CFDI: Señalar por parte del cliente.`;
     </script>
 </body>
 </html>
+
